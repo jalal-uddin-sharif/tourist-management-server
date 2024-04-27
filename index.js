@@ -5,7 +5,7 @@ const port = process.env.PORT || 3000;
 require("dotenv").config();
 const username = process.env.User_Name;
 const password = process.env.User_Password;
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 //middleware
 app.use(cors());
@@ -45,6 +45,26 @@ async function run() {
       const spot = touristUserCollection.find({email : req.params.email})
       const result = await spot.toArray();
       res.send(result);
+    })
+
+    app.put("/update-spot/:id", async(req, res)=>{
+      const query = {_id: new ObjectId(req.params.id)}
+      const data={
+        $set:{
+          imageUrl: req.body.imageUrl,
+          spotName: req.body.spotName,
+          countryName: req.body.countryName,
+          location: req.body.location,
+          cost: req.body.cost,
+          season: req.body.season,
+          time: req.body.time,
+          visitorPerYear: req.body.visitorPerYear,
+          textArea: req.body.textArea
+
+        }
+      }
+      const result = await touristUserCollection.updateOne(query, data)
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection
