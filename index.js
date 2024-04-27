@@ -40,17 +40,26 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/myAddedSpot/:email", async(req, res)=>{
+    app.get("/myAddedSpot/:email", async (req, res) => {
       console.log(req.params.body);
-      const spot = touristUserCollection.find({email : req.params.email})
+      const spot = touristUserCollection.find({ email: req.params.email });
       const result = await spot.toArray();
       res.send(result);
-    })
+    });
 
-    app.put("/update-spot/:id", async(req, res)=>{
-      const query = {_id: new ObjectId(req.params.id)}
-      const data={
-        $set:{
+    app.get("/spot/:id", async (req, res) => {
+      console.log(req.params.body);
+      const spot = touristUserCollection.find({
+        _id: new ObjectId(req.params.id),
+      });
+      const result = await spot.toArray();
+      res.send(result);
+    });
+
+    app.put("/update-spot/:id", async (req, res) => {
+      const query = { _id: new ObjectId(req.params.id) };
+      const data = {
+        $set: {
           imageUrl: req.body.imageUrl,
           spotName: req.body.spotName,
           countryName: req.body.countryName,
@@ -59,11 +68,15 @@ async function run() {
           season: req.body.season,
           time: req.body.time,
           visitorPerYear: req.body.visitorPerYear,
-          textArea: req.body.textArea
+          textArea: req.body.textArea,
+        },
+      };
+      const result = await touristUserCollection.updateOne(query, data);
+      res.send(result);
+    });
 
-        }
-      }
-      const result = await touristUserCollection.updateOne(query, data)
+    app.delete("/delete-spot/:id", async(req, res)=>{
+      const result = await touristUserCollection.deleteOne({_id: new ObjectId(req.params.id)})
       res.send(result)
     })
 
