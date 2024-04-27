@@ -40,7 +40,12 @@ async function run() {
       res.send(result);
     });
 
-    
+    app.get("/myAddedSpot/:email", async(req, res)=>{
+      console.log(req.params.body);
+      const spot = touristUserCollection.find({email : req.params.email})
+      const result = await spot.toArray();
+      res.send(result);
+    })
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
