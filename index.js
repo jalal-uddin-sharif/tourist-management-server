@@ -8,7 +8,10 @@ const password = process.env.User_Password;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 //middleware
-app.use(cors());
+app.use(cors({
+  origin: ["https://tourspotter-bb912.web.app", "http://localhost:5173"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+}));
 app.use(express.json());
 
 const uri = `mongodb+srv://${username}:${password}@cluster0.zukg64l.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -40,14 +43,14 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/myAddedSpot/:email", async (req, res) => {
+    app.get("/my-added-spot/:email", async (req, res) => {
       console.log(req.params.body);
       const spot = touristUserCollection.find({ email: req.params.email });
       const result = await spot.toArray();
       res.send(result);
     });
 
-    app.get("/spot/:id", async (req, res) => {
+    app.get("/spots/:id", async (req, res) => {
       console.log(req.params.body);
       const spot = touristUserCollection.find({
         _id: new ObjectId(req.params.id),
@@ -60,15 +63,15 @@ async function run() {
       const query = { _id: new ObjectId(req.params.id) };
       const data = {
         $set: {
-          imageUrl: req.body.imageUrl,
-          spotName: req.body.spotName,
-          countryName: req.body.countryName,
+          image: req.body.image,
+          tourists_spot_name: req.body.tourists_spot_name,
+          country_Name: req.body.country_Name,
           location: req.body.location,
-          cost: req.body.cost,
-          season: req.body.season,
-          time: req.body.time,
-          visitorPerYear: req.body.visitorPerYear,
-          textArea: req.body.textArea,
+          average_cost: req.body.average_cost,
+          seasonality: req.body.seasonality,
+          travel_time: req.body.travel_time,
+          totaVisitorsPerYear: req.body.totaVisitorsPerYear,
+          short_description: req.body.short_description,
         },
       };
       const result = await touristUserCollection.updateOne(query, data);
