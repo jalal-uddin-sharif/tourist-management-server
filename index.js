@@ -59,11 +59,22 @@ async function run() {
       const result = await spot.toArray();
       res.send(result);
     });
+
+    //challges part
     app.get("/country/:country_name", async (req, res) => {
-      const spot = countryCollection.find({country_Name: req.params.country_name});
-      const result = await spot.toArray();
+      const country = countryCollection.find({country_Name: req.params.country_name});
+      const result = await country.toArray();
       res.send(result);
     });
+    app.get("/country", async (req, res) => {
+      const country = countryCollection.find();
+      const result = await country.toArray();
+      res.send(result);
+    });
+
+
+
+    //------------
 
     app.put("/update-spot/:id", async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
