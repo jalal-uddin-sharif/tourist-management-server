@@ -29,6 +29,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const touristUserCollection = client.db("tourisDB").collection("tourist");
+    const countryCollection = client.db("tourisDB").collection("countries");
 
     app.post("/spot-data", async (req, res) => {
       const spotData = req.body;
@@ -55,6 +56,11 @@ async function run() {
       const spot = touristUserCollection.find({
         _id: new ObjectId(req.params.id),
       });
+      const result = await spot.toArray();
+      res.send(result);
+    });
+    app.get("/country/:country_name", async (req, res) => {
+      const spot = countryCollection.find({country_Name: req.params.country_name});
       const result = await spot.toArray();
       res.send(result);
     });
