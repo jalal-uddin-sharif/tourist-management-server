@@ -61,8 +61,8 @@ async function run() {
     });
 
     //challges part
-    app.get("/country/:country_name", async (req, res) => {
-      const country = countryCollection.find({country_Name: req.params.country_name});
+    app.get("/country-spots/:country_name", async (req, res) => {
+      const country = touristUserCollection.find({country_Name: req.params.country_name});
       const result = await country.toArray();
       res.send(result);
     });
